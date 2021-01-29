@@ -1,0 +1,4 @@
+onvifdevices:
+- xaddr: 192.168.123.211:8899
+  username: admin
+  password: ""

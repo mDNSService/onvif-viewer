@@ -1,0 +1,118 @@
+# This is an example goreleaser.yaml file with some sane defaults.
+# Make sure to check the documentation at http://goreleaser.com
+before:
+  hooks:
+    # you may remove this if you don't use vgo
+#    - go mod tidy
+#    - go mod vendor
+builds:
+- env:
+    - CGO_ENABLED=0
+    - GO111MODULE=on
+  ldflags:
+    - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{ .CommitDate }} -X main.builtBy=goreleaser
+  goos:
+    - linux
+    - darwin
+    - windows
+  goarch:
+    - 386
+    - amd64
+    - arm
+    - arm64
+    - mips64
+    - mips64le
+    - mips
+    - mipsle
+  gomips:
+    - hardfloat
+    - softfloat
+  ignore:
+    - goos: darwin
+      goarch: 386
+archives:
+- replacements:
+    darwin: Darwin
+    linux: Linux
+    windows: Windows
+    386: i386
+    amd64: x86_64
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
+brews:
+  - tap:
+      owner: OpenIoTHub
+      name: homebrew-tap
+    folder: Formula
+    homepage:  https://github.com/mDNSService/onvif-viewer
+    description: Onvif Camera Viewer
+    test: |
+      system "#{bin}/onvif-viewer -v"
+scoop:
+  bucket:
+    owner: OpenIoTHub
+    name: scoop-bucket
+  homepage:  https://github.com/mDNSService/onvif-viewer
+  description: Onvif Camera Viewer
+  license: MIT
+nfpms:
+  - file_name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}'
+    homepage:  https://github.com/mDNSService/onvif-viewer
+    description: Onvif Camera Viewer
+    maintainer: OpenIoTHub <newfarry@126.com>
+    license: MIT
+    vendor: onvif-viewer
+    formats:
+      - deb
+      - rpm
+    scripts:
+      preinstall: "scripts/install_remove/preinstall.sh"
+      postinstall: "scripts/install_remove/postinstall.sh"
+      preremove: "scripts/install_remove/preremove.sh"
+      postremove: "scripts/install_remove/postremove.sh"
+    contents:
+      - src: systemd/**
+        dst: /etc/systemd/system
+      - src: onvif-viewer.yaml
+        dst: /etc/onvif-viewer/onvif-viewer.yaml
+        type: config
+snapcrafts:
+  - name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}'
+    summary: Onvif Camera Viewer.
+    description: |
+      Onvif Camera Viewer
+    grade: stable
+#    confinement: classic
+    publish: true
+    apps:
+      onvif-viewer:
+        plugs: ["network", "network-bind"]
+        daemon: simple
+        command: onvif-viewer
+dockers:
+  - image_templates:
+      - 'openiothub/onvif-viewer:{{ .Tag }}'
+      - 'openiothub/onvif-viewer:v{{ .Major }}.{{ .Minor }}'
+      - 'openiothub/onvif-viewer:latest'
+    dockerfile: Dockerfile
+    binaries:
+      - onvif-viewer
+    build_flag_templates:
+      - "--pull"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.name={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=org.opencontainers.image.source={{.GitURL}}"
+      - "--label=com.github.actions.name={{.ProjectName}}"
+
+    extra_files:
+      - scripts/entrypoint.sh
