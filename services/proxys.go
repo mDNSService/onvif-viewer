@@ -102,7 +102,7 @@ func ProxyAndRegRtsp(device *onvif.Device) {
 		Ip:       host,
 		Text: []string{
 			"name=Onvif Camera",
-			"model=org.onvif.camera",
+			"model=org.onvif.camera.vlc.v1",
 			"mac=unknown",
 			fmt.Sprintf("id=%s", uuidStr),
 			"author=Farry",
