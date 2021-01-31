@@ -2,6 +2,15 @@
 
 [![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-white.svg)](https://snapcraft.io/onvif-viewer)
 
+安装本插件，运行一遍插件生成配置文件，修改配置文件（修改添加onvif摄像头地址，用户名，密码），之后再运行一遍
+然后使用云易连
+View App: https://github.com/OpenIoTHub/OpenIoTHub
+* deviceList.jpg
+<img src="./images/deviceList.jpg" width = "50%" height = "50%" alt="设备列表"/>
+* cameraVideo.jpg
+<img src="./images/cameraVideo.jpg" width = "50%" height = "50%" alt="摄像头视频"/>
+* deviceList.jpg
+<img src="./images/cameraInfo.jpg" width = "50%" height = "50%" alt="摄像头信息"/>
 ```sh
 onvif-viewer -c /path/to/config/file/onvif-viewer.yaml
 ```
@@ -10,12 +19,6 @@ or just:
 onvif-viewer
 ```
 (use default config file: ./onvif-viewer.yaml)
-
-or:
-```sh
- onvif-viewer run -i myid -k mykey -m iothub.cloud -s www -c 60
-```
--i {AccessId} -k {AccessKey} -m {MainDomain} -s {SubDomainName} -c {CheckUpdateInterval}
 
 You can install the pre-compiled binary (in several different ways),
 use Docker.
