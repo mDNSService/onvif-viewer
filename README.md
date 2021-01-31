@@ -6,11 +6,11 @@
 然后使用云易连
 View App: https://github.com/OpenIoTHub/OpenIoTHub
 * deviceList.jpg
-<img src="./images/deviceList.jpg" width = "50%" height = "50%" alt="设备列表"/>
+![deviceList.jpg](./images/deviceList.jpg)
 * cameraVideo.jpg
-<img src="./images/cameraVideo.jpg" width = "50%" height = "50%" alt="摄像头视频"/>
-* deviceList.jpg
-<img src="./images/cameraInfo.jpg" width = "50%" height = "50%" alt="摄像头信息"/>
+![cameraVideo.jpg](./images/cameraVideo.jpg)
+* cameraInfo.jpg
+![cameraInfo.jpg](./images/cameraInfo.jpg)
 ```sh
 onvif-viewer -c /path/to/config/file/onvif-viewer.yaml
 ```
