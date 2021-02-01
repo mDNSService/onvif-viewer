@@ -3,15 +3,15 @@ package services
 import (
 	"fmt"
 	"github.com/iotdevice/zeroconf"
+	"github.com/mDNSService/onvif"
 	"github.com/mDNSService/onvif-viewer/config"
 	"github.com/mDNSService/onvif-viewer/models"
 	"github.com/mDNSService/onvif-viewer/utils"
+	device "github.com/mDNSService/onvif/device"
+	"github.com/mDNSService/onvif/media"
+	onvif2 "github.com/mDNSService/onvif/xsd/onvif"
 	"github.com/satori/go.uuid"
 	"github.com/urfave/cli/v2"
-	"github.com/use-go/onvif"
-	device "github.com/use-go/onvif/device"
-	"github.com/use-go/onvif/media"
-	onvif2 "github.com/use-go/onvif/xsd/onvif"
 	"io/ioutil"
 	"log"
 	"net/url"
@@ -41,6 +41,7 @@ func Run(c *cli.Context) error {
 
 func ProxyAndRegRtsp(dev *onvif.Device) {
 	//测试
+	log.Println("dev.GetServices():")
 	log.Println(dev.GetServices())
 	getCapabilities := device.GetCapabilities{Category: "All"}
 	resp, err := dev.CallMethod(getCapabilities)

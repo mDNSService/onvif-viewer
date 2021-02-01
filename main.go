@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"github.com/mDNSService/onvif-viewer/services"
 
+	"github.com/mDNSService/onvif"
 	"github.com/mDNSService/onvif-viewer/config"
 	"github.com/urfave/cli/v2"
-	"github.com/use-go/onvif"
 	"log"
 	"net"
 	"os"
