@@ -11,7 +11,7 @@ func GetTokenFromGetProfiles(doc string) (tokens []string, err error) {
 	if err != nil {
 		return
 	}
-	tokenEls := document.Root().FindElements("//SOAP-ENV:Envelope/SOAP-ENV:Body/trt:GetProfilesResponse/trt:Profiles")
+	tokenEls := document.Root().FindElements("//Envelope/Body/GetProfilesResponse/Profiles")
 	//log.Println(len(tokenEls))
 	for _, el := range tokenEls {
 		//log.Println(el.SelectAttr("token").Value)
@@ -26,7 +26,7 @@ func GetUriFromGetMediaUri(doc string) (uri string, err error) {
 	if err != nil {
 		return
 	}
-	tokenEl := document.Root().FindElement("//SOAP-ENV:Envelope/SOAP-ENV:Body/trt:GetStreamUriResponse/trt:MediaUri/tt:Uri")
+	tokenEl := document.Root().FindElement("//Envelope/Body/GetStreamUriResponse/MediaUri/Uri")
 	uri = tokenEl.Text()
 	return
 }

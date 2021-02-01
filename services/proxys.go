@@ -7,7 +7,7 @@ import (
 	"github.com/mDNSService/onvif-viewer/config"
 	"github.com/mDNSService/onvif-viewer/models"
 	"github.com/mDNSService/onvif-viewer/utils"
-	device "github.com/mDNSService/onvif/device"
+	//device "github.com/mDNSService/onvif/device"
 	"github.com/mDNSService/onvif/media"
 	onvif2 "github.com/mDNSService/onvif/xsd/onvif"
 	"github.com/satori/go.uuid"
@@ -41,24 +41,24 @@ func Run(c *cli.Context) error {
 
 func ProxyAndRegRtsp(dev *onvif.Device) {
 	//测试
-	log.Println("dev.GetServices():")
-	log.Println(dev.GetServices())
-	getCapabilities := device.GetCapabilities{Category: "All"}
-	resp, err := dev.CallMethod(getCapabilities)
+	//log.Println("dev.GetServices():")
+	//log.Println(dev.GetServices())
+	//getCapabilities := device.GetCapabilities{Category: "All"}
+	//resp, err := dev.CallMethod(getCapabilities)
+	//if err != nil {
+	//	log.Println(err)
+	//	return
+	//}
+	//bytes, _ := ioutil.ReadAll(resp.Body)
+	//log.Println("GetCapabilities:")
+	//log.Println(string(bytes))
+	//第一步：获取GetProfiles，从中获取token
+	resp, err := dev.CallMethod(media.GetProfiles{})
 	if err != nil {
 		log.Println(err)
 		return
 	}
 	bytes, _ := ioutil.ReadAll(resp.Body)
-	log.Println("GetCapabilities:")
-	log.Println(string(bytes))
-	//第一步：获取GetProfiles，从中获取token
-	resp, err = dev.CallMethod(media.GetProfiles{})
-	if err != nil {
-		log.Println(err)
-		return
-	}
-	bytes, _ = ioutil.ReadAll(resp.Body)
 	//log.Println(string(bytes))
 	tokens, err := utils.GetTokenFromGetProfiles(string(bytes))
 	if err != nil {

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"reflect"
 	"strconv"
@@ -156,17 +157,23 @@ func (dev *Device) getSupportedServices(resp *http.Response) {
 	//} else {
 	doc := etree.NewDocument()
 
-	data, _ := ioutil.ReadAll(resp.Body)
-
-	if err := doc.ReadFromBytes(data); err != nil {
-		//log.Println(err.Error())
+	data, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Println(err)
 		return
 	}
-	//services := doc.FindElements("./Envelope/Body/GetCapabilitiesResponse/Capabilities/*/XAddr")
-	services := doc.FindElements("./*/*/GetCapabilitiesResponse/Capabilities/*/XAddr")
+	//log.Println("ReadAll:", string(data))
+	if err := doc.ReadFromBytes(data); err != nil {
+		log.Println(err)
+		return
+	}
+	services := doc.FindElements("./Envelope/Body/GetCapabilitiesResponse/Capabilities/*/XAddr")
+	//services := doc.FindElements("./*/*/GetCapabilitiesResponse/Capabilities/*/XAddr")
+	//log.Println("services len:", len(services))
+	//log.Printf("%+v", services)
 	for _, j := range services {
-		//fmt.Println(j.Text())
-		//fmt.Println(j.Parent().Tag)
+		//log.Println(j.Parent().Tag)
+		//log.Println(j.Text())
 		dev.addEndpoint(j.Parent().Tag, j.Text())
 	}
 	//}
@@ -178,7 +185,11 @@ func NewDevice(xaddr string) (*Device, error) {
 	dev.xaddr = xaddr
 	dev.endpoints = make(map[string]string)
 	dev.addEndpoint("Device", "http://"+xaddr+"/onvif/device_service")
+	dev.GetCapabilities()
+	return dev, nil
+}
 
+func (dev *Device) GetCapabilities() {
 	getCapabilities := device.GetCapabilities{Category: "All"}
 
 	resp, err := dev.CallMethod(getCapabilities)
@@ -186,11 +197,10 @@ func NewDevice(xaddr string) (*Device, error) {
 	//fmt.Println(readResponse(resp))
 	if err != nil || resp.StatusCode != http.StatusOK {
 		//panic(errors.New("camera is not available at " + xaddr + " or it does not support ONVIF services"))
-		return nil, errors.New("camera is not available at " + xaddr + " or it does not support ONVIF services")
+		log.Println(errors.New("camera is not available or it does not support ONVIF services"), err)
 	}
 
 	dev.getSupportedServices(resp)
-	return dev, nil
 }
 
 func (dev *Device) addEndpoint(Key, Value string) {
@@ -208,6 +218,7 @@ func (dev *Device) addEndpoint(Key, Value string) {
 func (dev *Device) Authenticate(username, password string) {
 	dev.login = username
 	dev.password = password
+	dev.GetCapabilities()
 }
 
 //GetEndpoint returns specific ONVIF service endpoint address
