@@ -41,6 +41,7 @@ func Run(c *cli.Context) error {
 
 func ProxyAndRegRtsp(dev *onvif.Device) {
 	//测试
+	log.Println(dev.GetServices())
 	getCapabilities := device.GetCapabilities{Category: "All"}
 	resp, err := dev.CallMethod(getCapabilities)
 	if err != nil {
