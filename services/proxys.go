@@ -9,6 +9,7 @@ import (
 	"github.com/satori/go.uuid"
 	"github.com/urfave/cli/v2"
 	"github.com/use-go/onvif"
+	device "github.com/use-go/onvif/device"
 	"github.com/use-go/onvif/media"
 	onvif2 "github.com/use-go/onvif/xsd/onvif"
 	"io/ioutil"
@@ -38,14 +39,24 @@ func Run(c *cli.Context) error {
 	return nil
 }
 
-func ProxyAndRegRtsp(device *onvif.Device) {
-	//第一步：获取GetProfiles，从中获取token
-	resp, err := device.CallMethod(media.GetProfiles{})
+func ProxyAndRegRtsp(dev *onvif.Device) {
+	//测试
+	getCapabilities := device.GetCapabilities{Category: "All"}
+	resp, err := dev.CallMethod(getCapabilities)
 	if err != nil {
 		log.Println(err)
 		return
 	}
 	bytes, _ := ioutil.ReadAll(resp.Body)
+	log.Println("GetCapabilities:")
+	log.Println(string(bytes))
+	//第一步：获取GetProfiles，从中获取token
+	resp, err = dev.CallMethod(media.GetProfiles{})
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	bytes, _ = ioutil.ReadAll(resp.Body)
 	//log.Println(string(bytes))
 	tokens, err := utils.GetTokenFromGetProfiles(string(bytes))
 	if err != nil {
@@ -58,7 +69,7 @@ func ProxyAndRegRtsp(device *onvif.Device) {
 	}
 	log.Println(tokens[len(tokens)-1])
 	//第二步：使用上一步的token获取GetStreamUri，获取视频流的地址
-	resp, err = device.CallMethod(media.GetStreamUri{
+	resp, err = dev.CallMethod(media.GetStreamUri{
 		StreamSetup: onvif2.StreamSetup{
 			Stream:    "RTP-Unicast",
 			Transport: onvif2.Transport{Protocol: "HTTP", Tunnel: nil},
