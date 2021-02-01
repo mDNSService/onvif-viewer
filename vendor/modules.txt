@@ -1,0 +1,54 @@
+# github.com/beevik/etree v1.1.0
+## explicit
+github.com/beevik/etree
+# github.com/cenkalti/backoff/v4 v4.1.0
+github.com/cenkalti/backoff/v4
+# github.com/cpuguy83/go-md2man/v2 v2.0.0-20190314233015-f79a8a8ca69d
+github.com/cpuguy83/go-md2man/v2/md2man
+# github.com/elgs/gostrgen v0.0.0-20161222160715-9d61ae07eeae
+github.com/elgs/gostrgen
+# github.com/gofrs/uuid v3.2.0+incompatible
+github.com/gofrs/uuid
+# github.com/iotdevice/zeroconf v0.1.4
+## explicit
+github.com/iotdevice/zeroconf
+# github.com/mDNSService/onvif v0.0.3
+## explicit
+github.com/mDNSService/onvif
+github.com/mDNSService/onvif/device
+github.com/mDNSService/onvif/gosoap
+github.com/mDNSService/onvif/media
+github.com/mDNSService/onvif/networking
+github.com/mDNSService/onvif/ws-discovery
+github.com/mDNSService/onvif/xsd
+github.com/mDNSService/onvif/xsd/iso8601
+github.com/mDNSService/onvif/xsd/onvif
+# github.com/miekg/dns v1.1.37
+## explicit
+github.com/miekg/dns
+# github.com/russross/blackfriday/v2 v2.0.1
+github.com/russross/blackfriday/v2
+# github.com/satori/go.uuid v1.2.0
+## explicit
+github.com/satori/go.uuid
+# github.com/shurcooL/sanitized_anchor_name v1.0.0
+github.com/shurcooL/sanitized_anchor_name
+# github.com/urfave/cli/v2 v2.3.0
+## explicit
+github.com/urfave/cli/v2
+# golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550
+golang.org/x/crypto/ed25519
+golang.org/x/crypto/ed25519/internal/edwards25519
+# golang.org/x/net v0.0.0-20210119194325-5f4716e94777
+golang.org/x/net/bpf
+golang.org/x/net/internal/iana
+golang.org/x/net/internal/socket
+golang.org/x/net/ipv4
+golang.org/x/net/ipv6
+# golang.org/x/sys v0.0.0-20201119102817-f84b799fce68
+golang.org/x/sys/internal/unsafeheader
+golang.org/x/sys/unix
+golang.org/x/sys/windows
+# gopkg.in/yaml.v2 v2.4.0
+## explicit
+gopkg.in/yaml.v2

@@ -103,9 +103,11 @@ func ProxyAndRegRtsp(dev *onvif.Device) {
 		log.Println(err)
 		return
 	}
+	username := URL.User.Username()
+	password, _ := URL.User.Password()
 	//log.Println(URL.Path)
 	//log.Println(URL.Scheme)
-	log.Println(host, port)
+	log.Println(host, port, username, password)
 	newEntry := &models.ServiceInfo{
 		Instance: uuidStr,
 		Service:  "_iotdevice._tcp",
@@ -126,6 +128,8 @@ func ProxyAndRegRtsp(dev *onvif.Device) {
 			//addition
 			fmt.Sprintf("scheme=%s", URL.Scheme),
 			fmt.Sprintf("path=%s", URL.Path),
+			fmt.Sprintf("username=%s", username),
+			fmt.Sprintf("password=%s", password),
 		},
 	}
 
