@@ -35,6 +35,8 @@ github.com/mDNSService/onvif v0.0.8 h1:hddXcioL/z/nVhMtrD3KNKAsdqc4Al1lZAE87G2cq
 github.com/mDNSService/onvif v0.0.8/go.mod h1:Zu65iYw0XYhXdtHhjTda447VtWt9/d5X+BH6VwsTrz8=
 github.com/mDNSService/onvif v0.0.9 h1:ihLwmweo5ujr76oKEEhsUOLK+zQBLrJ3lSUIprXq2S0=
 github.com/mDNSService/onvif v0.0.9/go.mod h1:Zu65iYw0XYhXdtHhjTda447VtWt9/d5X+BH6VwsTrz8=
+github.com/mDNSService/onvif v0.0.10 h1:ZM7lmaCPgwD0iW6MKVOk/ch1W3Eb9oHNEgFh0wqCkuo=
+github.com/mDNSService/onvif v0.0.10/go.mod h1:Zu65iYw0XYhXdtHhjTda447VtWt9/d5X+BH6VwsTrz8=
 github.com/mattn/go-isatty v0.0.12/go.mod h1:cbi8OIDigv2wuxKPP5vlRcQ1OAZbq2CE4Kysco4FUpU=
 github.com/miekg/dns v1.1.35/go.mod h1:KNUDUusw/aVsxyTYZM1oqvCicbwhgbNgztCETuNZ7xM=
 github.com/miekg/dns v1.1.37 h1:+kky2ArpBqk0S/74RkwFjmKM9jja7AB1RN7VUuVq0iM=

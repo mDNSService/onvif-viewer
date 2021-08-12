@@ -31,7 +31,7 @@ func Run(c *cli.Context) error {
 			continue
 		}
 		dev.Authenticate(deviceConf.UserName, deviceConf.Password)
-		go ProxyAndRegRtsp(dev)
+		go ProxyAndRegRtsp(dev, deviceConf.Name)
 	}
 	for {
 		time.Sleep(time.Hour)
@@ -39,7 +39,7 @@ func Run(c *cli.Context) error {
 	return nil
 }
 
-func ProxyAndRegRtsp(dev *onvif.Device) {
+func ProxyAndRegRtsp(dev *onvif.Device, name string) {
 	//测试
 	//log.Println("dev.GetServices():")
 	//log.Println(dev.GetServices())
@@ -116,7 +116,7 @@ func ProxyAndRegRtsp(dev *onvif.Device) {
 		HostName: uuidStr,
 		Ip:       host,
 		Text: []string{
-			"name=Onvif Camera",
+			name,
 			"model=com.iotserv.services.vlc.player",
 			"mac=unknown",
 			fmt.Sprintf("id=%s", uuidStr),

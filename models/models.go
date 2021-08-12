@@ -1,10 +1,14 @@
 package models
 
 type ConfigModel struct {
+	//this DVR name
+	Name         string
 	OnvifDevices []OnvifDeviceConfig
 }
 
 type OnvifDeviceConfig struct {
+	//this Camera name
+	Name     string
 	XAddr    string
 	UserName string
 	Password string

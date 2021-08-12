@@ -49,7 +49,7 @@ func SendProbe(interfaceName string, scopes, types []string, namespaces map[stri
 }
 
 func sendUDPMulticast(msg string, interfaceName string) []string {
-	var result []string
+	var result = make([]string, 0)
 	data := []byte(msg)
 	iface, err := net.InterfaceByName(interfaceName)
 	if err != nil {
@@ -60,6 +60,7 @@ func sendUDPMulticast(msg string, interfaceName string) []string {
 	c, err := net.ListenPacket("udp4", "0.0.0.0:1024")
 	if err != nil {
 		fmt.Println(err)
+		return result
 	}
 	defer c.Close()
 

@@ -1,4 +1,6 @@
+name: "Onvif Manager"
 onvifdevices:
-- xaddr: 192.168.123.211:8899
+- name: Onvif Camera Demo
+  xaddr: 192.168.123.211:8899
   username: admin
   password: ""

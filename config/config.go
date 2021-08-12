@@ -15,6 +15,7 @@ var ConfigFilePath = fmt.Sprintf("./%s", ConfigFileName)
 var ConfigModel = &models.ConfigModel{
 	OnvifDevices: []models.OnvifDeviceConfig{
 		{
+			Name:     "Onvif Camera Demo",
 			XAddr:    "192.168.123.211:8899",
 			UserName: "admin",
 			Password: "",

@@ -12,7 +12,7 @@ github.com/gofrs/uuid
 # github.com/iotdevice/zeroconf v0.1.4
 ## explicit
 github.com/iotdevice/zeroconf
-# github.com/mDNSService/onvif v0.0.9
+# github.com/mDNSService/onvif v0.0.10
 ## explicit
 github.com/mDNSService/onvif
 github.com/mDNSService/onvif/device
