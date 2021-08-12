@@ -116,7 +116,7 @@ func ProxyAndRegRtsp(dev *onvif.Device, name string) {
 		HostName: uuidStr,
 		Ip:       host,
 		Text: []string{
-			name,
+			fmt.Sprintf("name=%s", name),
 			"model=com.iotserv.services.vlc.player",
 			"mac=unknown",
 			fmt.Sprintf("id=%s", uuidStr),
