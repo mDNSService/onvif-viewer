@@ -14,6 +14,17 @@ type OnvifDeviceConfig struct {
 	Password string
 }
 
+type OperationResp struct {
+	Code int
+	Msg  string
+}
+
+type OnvifDeviceConfigListResp struct {
+	Code         int
+	Msg          string
+	OnvifDevices []OnvifDeviceConfig
+}
+
 type ServiceInfo struct {
 	Instance string   `json:"instance"`
 	Service  string   `json:"service"`

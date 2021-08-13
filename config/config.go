@@ -25,6 +25,9 @@ var ConfigModel = &models.ConfigModel{
 
 //将配置写入指定的路径的文件
 func WriteConfigFile(ConfigMode *models.ConfigModel, path string) (err error) {
+	if path == "" {
+		path = ConfigFilePath
+	}
 	configByte, err := yaml.Marshal(ConfigMode)
 	if err != nil {
 		log.Fatalln(err.Error())
