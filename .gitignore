@@ -2,3 +2,4 @@
 /test/main.go
 /snap.login
 *.exe
+/onvif-viewer

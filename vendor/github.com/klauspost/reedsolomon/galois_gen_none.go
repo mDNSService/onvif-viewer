@@ -1,11 +1,19 @@
-//+build !amd64 noasm appengine gccgo nogen
+//go:build !(amd64 || arm64) || noasm || appengine || gccgo || nogen
 
 package reedsolomon
 
-const maxAvx2Inputs = 0
-const maxAvx2Outputs = 0
-const avx2CodeGen = false
+const (
+	codeGen              = false
+	codeGenMaxGoroutines = 8
+	codeGenMaxInputs     = 1
+	codeGenMaxOutputs    = 1
+	minCodeGenSize       = 1
+)
 
-func galMulSlicesAvx2(matrix []byte, in, out [][]byte, start, stop int) int {
-	panic("avx2 codegen not available")
+func (r *reedSolomon) hasCodeGen(int, int, int) (_, _ *func(matrix []byte, in, out [][]byte, start, stop int) int, ok bool) {
+	return nil, nil, false
+}
+
+func (r *reedSolomon) canGFNI(int, int, int) (_, _ *func(matrix []uint64, in, out [][]byte, start, stop int) int, ok bool) {
+	return nil, nil, false
 }

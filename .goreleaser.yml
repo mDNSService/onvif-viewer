@@ -1,73 +1,83 @@
 # This is an example goreleaser.yaml file with some sane defaults.
 # Make sure to check the documentation at http://goreleaser.com
+version: 2
+
 before:
   hooks:
-    # you may remove this if you don't use vgo
-#    - go mod tidy
-#    - go mod vendor
+    # You may remove this if you don't use go modules.
+    - go mod download
+    # you may remove this if you don't need go generate
+    - go generate ./...
 builds:
-- env:
-    - CGO_ENABLED=0
-    - GO111MODULE=on
-  ldflags:
-    - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{ .CommitDate }} -X main.builtBy=goreleaser
-  goos:
-    - linux
-    - darwin
-    - windows
-  goarch:
-    - 386
-    - amd64
-    - arm
-    - arm64
-    - mips64
-    - mips64le
-    - mips
-    - mipsle
-  gomips:
-    - hardfloat
-    - softfloat
-  ignore:
-    - goos: darwin
-      goarch: 386
+  - env:
+      - CGO_ENABLED=0
+    flags:
+      - -trimpath
+    goos:
+      - android
+      - linux
+      - windows
+      - darwin
+    #      - freebsd
+    goarch:
+      - '386'
+      - amd64
+      - arm
+      - arm64
+      - mips
+      - mipsle
+      - mips64
+      - mips64le
+    goarm:
+      - '5'
+      - '6'
+      - '7'
+    gomips:
+      - hardfloat
+      - softfloat
+    ignore:
+      # we only need the arm64 build on android
+      - goos: android
+        goarch: arm
+      - goos: android
+        goarch: '386'
+      - goos: android
+        goarch: amd64
+    ldflags:
+      - -s -w -X github.com/mDNSService/onvif-viewer/info.Version={{.Version}} -X github.com/mDNSService/onvif-viewer/info.Commit={{.Commit}} -X github.com/mDNSService/onvif-viewer/info.Date={{ .CommitDate }} -X github.com/mDNSService/onvif-viewer/info.BuiltBy=goreleaser
+
 archives:
-- replacements:
-    darwin: Darwin
-    linux: Linux
-    windows: Windows
-    386: i386
-    amd64: x86_64
+  # use zip for windows archives
+  - format_overrides:
+      - goos: windows
+        format: zip
+    # this name template makes the OS and Arch compatible with the results of uname.
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- .Version }}_
+      {{- .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Mips }}_{{ .Mips }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+
 checksum:
   name_template: 'checksums.txt'
 snapshot:
-  name_template: "{{ .Tag }}-next"
+  version_template: "{{ incpatch .Version }}-devel"
 changelog:
   sort: asc
   filters:
     exclude:
-    - '^docs:'
-    - '^test:'
-brews:
-  - tap:
-      owner: OpenIoTHub
-      name: homebrew-tap
-    folder: Formula
-    homepage:  https://github.com/mDNSService/onvif-viewer
-    description: Onvif Camera Viewer
-    test: |
-      system "#{bin}/onvif-viewer -v"
-scoop:
-  bucket:
-    owner: OpenIoTHub
-    name: scoop-bucket
-  homepage:  https://github.com/mDNSService/onvif-viewer
-  description: Onvif Camera Viewer
-  license: MIT
+      - '^docs:'
+      - '^test:'
+
 nfpms:
   - file_name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}'
-    homepage:  https://github.com/mDNSService/onvif-viewer
-    description: Onvif Camera Viewer
-    maintainer: OpenIoTHub <newfarry@126.com>
+    homepage:  http://github.com/mDNSService
+    description: mDNSService GateWay
+    maintainer: mDNSService <newfarry@126.com>
     license: MIT
     vendor: onvif-viewer
     formats:
@@ -86,12 +96,12 @@ nfpms:
         type: config
 snapcrafts:
   - name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}'
-    summary: Onvif Camera Viewer.
-    name: onvif
+    summary: mDNSService GateWay.
     description: |
-      Onvif Camera Viewer
+      mDNSService GateWay
     grade: stable
-#    confinement: classic
+    confinement: strict
+    #    confinement: classic
     publish: true
     apps:
       onvif-viewer:
@@ -100,20 +110,62 @@ snapcrafts:
         command: onvif-viewer
 dockers:
   - image_templates:
-      - 'openiothub/onvif-viewer:{{ .Tag }}'
-      - 'openiothub/onvif-viewer:v{{ .Major }}.{{ .Minor }}'
-      - 'openiothub/onvif-viewer:latest'
-    dockerfile: Dockerfile
-    binaries:
-      - onvif-viewer
+      - "{{ .Env.DOCKER_USERNAME }}/onvif-viewer:{{ .Tag }}-amd64"
+      - "ghcr.io/{{ tolower .Env.GITHUB_REPOSITORY }}:{{ .Tag }}-amd64"
+    use: buildx
     build_flag_templates:
-      - "--pull"
+      - "--platform=linux/amd64"
       - "--label=org.opencontainers.image.created={{.Date}}"
-      - "--label=org.opencontainers.image.name={{.ProjectName}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
       - "--label=org.opencontainers.image.version={{.Version}}"
-      - "--label=org.opencontainers.image.source={{.GitURL}}"
-      - "--label=com.github.actions.name={{.ProjectName}}"
 
-    extra_files:
-      - scripts/entrypoint.sh
+  - image_templates:
+      - "{{ .Env.DOCKER_USERNAME }}/onvif-viewer:{{ .Tag }}-arm64"
+      - "ghcr.io/{{ tolower .Env.GITHUB_REPOSITORY }}:{{ .Tag }}-arm64"
+    use: buildx
+    build_flag_templates:
+      - "--platform=linux/arm64"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+    goarch: arm64
+
+  - image_templates:
+      - "{{ .Env.DOCKER_USERNAME }}/onvif-viewer:{{ .Tag }}-armv7"
+      - "ghcr.io/{{ tolower .Env.GITHUB_REPOSITORY }}:{{ .Tag }}-armv7"
+    use: buildx
+    build_flag_templates:
+      - "--platform=linux/arm/v7"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+    goarch: arm
+    goarm: 7
+
+docker_manifests:
+  - name_template: "{{ .Env.DOCKER_USERNAME }}/onvif-viewer:{{ .Tag }}"
+    image_templates:
+      - "{{ .Env.DOCKER_USERNAME }}/onvif-viewer:{{ .Tag }}-amd64"
+      - "{{ .Env.DOCKER_USERNAME }}/onvif-viewer:{{ .Tag }}-arm64"
+      - "{{ .Env.DOCKER_USERNAME }}/onvif-viewer:{{ .Tag }}-armv7"
+
+  - name_template: "{{ .Env.DOCKER_USERNAME }}/onvif-viewer:latest"
+    image_templates:
+      - "{{ .Env.DOCKER_USERNAME }}/onvif-viewer:{{ .Tag }}-amd64"
+      - "{{ .Env.DOCKER_USERNAME }}/onvif-viewer:{{ .Tag }}-arm64"
+      - "{{ .Env.DOCKER_USERNAME }}/onvif-viewer:{{ .Tag }}-armv7"
+
+  - name_template: "ghcr.io/{{ tolower .Env.GITHUB_REPOSITORY }}:{{ .Tag }}"
+    image_templates:
+      - "ghcr.io/{{ tolower .Env.GITHUB_REPOSITORY }}:{{ .Tag }}-amd64"
+      - "ghcr.io/{{ tolower .Env.GITHUB_REPOSITORY }}:{{ .Tag }}-arm64"
+      - "ghcr.io/{{ tolower .Env.GITHUB_REPOSITORY }}:{{ .Tag }}-armv7"
+
+  - name_template: "ghcr.io/{{ tolower .Env.GITHUB_REPOSITORY }}:latest"
+    image_templates:
+      - "ghcr.io/{{ tolower .Env.GITHUB_REPOSITORY }}:{{ .Tag }}-amd64"
+      - "ghcr.io/{{ tolower .Env.GITHUB_REPOSITORY }}:{{ .Tag }}-arm64"
+      - "ghcr.io/{{ tolower .Env.GITHUB_REPOSITORY }}:{{ .Tag }}-armv7"
