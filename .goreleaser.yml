@@ -121,7 +121,7 @@ snapcrafts:
     #    confinement: classic
     publish: true
     apps:
-      onvif:
+      onvif-viewer:
         plugs: [ "network", "network-bind" ]
         daemon: simple
         command: onvif-viewer
