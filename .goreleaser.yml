@@ -112,6 +112,20 @@ snapcrafts:
         plugs: [ "network", "network-bind" ]
         daemon: simple
         command: onvif-viewer
+  - name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}'
+    name: onvif
+    summary: mDNSService GateWay.
+    description: |
+      mDNSService GateWay
+    grade: stable
+    confinement: strict
+    #    confinement: classic
+    publish: true
+    apps:
+      onvif:
+        plugs: [ "network", "network-bind" ]
+        daemon: simple
+        command: onvif-viewer
 dockers:
   - image_templates:
       - "{{ .Env.DOCKER_USERNAME }}/onvif-viewer:{{ .Tag }}-amd64"
