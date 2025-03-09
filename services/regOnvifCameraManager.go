@@ -16,7 +16,8 @@ func RegOnvifCameraManager() (err error) {
 	http.HandleFunc("/list", GetOnvifCameraList)
 	http.HandleFunc("/add", AddOnvifCamera)
 	http.HandleFunc("/delete", DeleteOnvifCamera)
-	port, err := nettool.GetOneFreeTcpPort()
+	//port, err := nettool.GetOneFreeTcpPort()
+	port := 34324
 	fmt.Println("Http ListenAndServe on:", port)
 
 	var txts = map[string]string{

@@ -1,11 +1,13 @@
-FROM golang:1.13-alpine
-
+FROM alpine
+LABEL name=onvif-viewer
+LABEL url=https://github.com/OpenIoTHub/mDNSService
 RUN apk add --no-cache bash
 
-ENTRYPOINT ["/entrypoint.sh"]
-CMD [ "-h" ]
-
-COPY scripts/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-COPY onvif-viewer /bin/onvif-viewer
+WORKDIR /app
+COPY onvif-viewer /app/
+ENV TZ=Asia/Shanghai
+#mdns端口
+EXPOSE 5353/udp
+EXPOSE 34324
+ENTRYPOINT ["/app/onvif-viewer"]
+CMD ["-c", "/root/config.yaml"]
