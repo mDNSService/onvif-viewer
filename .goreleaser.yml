@@ -108,6 +108,10 @@ snapcrafts:
         plugs: ["network", "network-bind"]
         daemon: simple
         command: onvif-viewer
+      onvif:
+        plugs: [ "network", "network-bind" ]
+        daemon: simple
+        command: onvif-viewer
 dockers:
   - image_templates:
       - "{{ .Env.DOCKER_USERNAME }}/onvif-viewer:{{ .Tag }}-amd64"
