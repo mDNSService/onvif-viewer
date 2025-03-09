@@ -96,6 +96,7 @@ nfpms:
         type: config
 snapcrafts:
   - name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}'
+    id: onvif-viewer
     name: onvif-viewer
     summary: mDNSService GateWay.
     description: |
@@ -110,6 +111,7 @@ snapcrafts:
         daemon: simple
         command: onvif-viewer
   - name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}'
+    id: onvif
     name: onvif
     summary: mDNSService GateWay.
     description: |
